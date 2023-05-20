@@ -1,15 +1,16 @@
 import express  from 'express';
-const router = express.Router();
 import { getHome, setHome, updateHome, deleteHome,getHomeById } from '../controllers/homeController.js';
 import uploadImage from '../middleware/uploadImage.js';
+const router = express.Router();
 
 
 // Middleware
 // import {protect,admin} from '../middleware/authMiddleware.js'
 
-router.route('/').get(getHome)
+// router.route('/').get(getHome)
+router.get('/',getHome);
 
-router.route('/:id').get(getHomeById)
+router.get('/:id',getHomeById);
 
 router.route('/').post(
   uploadImage.fields([

@@ -48,9 +48,11 @@ const registerAdmin = asyncHandler(async(req,res)=>{
 const getAllAdmins = asyncHandler(async(req,res)=>{
     try{
         const admins = await Admin.find()
-    res.json(admins)
-    }catch(err){
-        res.json(err.message)
+        res.status(200)
+        res.json(admins)
+    }
+    catch(err){
+        res.json({"message":err})
     }
 });
 

@@ -22,7 +22,8 @@ const getResource = asyncHandler( async (req,res) =>{
       res.json(resource)
      }
      catch(err){
-      res.json({message:err})
+      res.json(err);
+      
      }
 })
 

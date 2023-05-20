@@ -38,7 +38,7 @@ app.use('/uploads', express.static('uploads'))
 app.use(errorHandler);
 
 //routes
-app.use('/api/',homeRoutes)
+app.use('/api/home',homeRoutes)
 app.use('/api/admin',adminRoutes)
 app.use('/api/activity',activityRoutes)
 app.use('/api/overview',overviewRoutes)

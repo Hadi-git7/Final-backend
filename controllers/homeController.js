@@ -32,15 +32,21 @@ const getHome = asyncHandler( async (req,res) =>{
 // @acess Private
 
 const getHomeById = async (req,res) =>{
-   const {id} = req.params
-   const home = await Home.findById(id)
-   if(!home){
-      res.status(400)
-      res.json('Home not found')
-  }else{
-   res.status(200).json(home)
+  try{
+    const {id} = req.params
+    const home = await Home.findById(id)
+    if(!home){
+        res.status(400)
+        res.json('Home not found')
+    }else{
+        res.status(200).json(home)
+    }
+  }catch(err){
+    res.json({"message":err})
+
+  } 
 }
-}
+
 
 // @ desc Set home
 // @route POST/api/home
