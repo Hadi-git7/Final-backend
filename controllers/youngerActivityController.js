@@ -1,6 +1,6 @@
 import asyncHandler from "express-async-handler" 
 import multer from 'multer'
-import Activity from '../models/activityModel.js'
+import Younger from '../models/youngerActivityModel.js'
 import { v2 as cloudinary } from "cloudinary";
 
 cloudinary.config({
@@ -11,15 +11,15 @@ cloudinary.config({
 
 
 
-// @ desc Get activities
-// @route GET/api/activity
+// @ desc Get younger activity
+// @route GET/api/younger
 // @acess Private
 
-const getActivity = asyncHandler( async (req,res) =>{
+const getYounger = asyncHandler( async (req,res) =>{
    try{
-      const activity = await Activity.find()
+      const younger = await Younger.find()
       res.status(200)
-      res.json(activity)
+      res.json(younger)
      }
      catch(err){
       res.json({message:err})
@@ -27,25 +27,25 @@ const getActivity = asyncHandler( async (req,res) =>{
 })
 
 
-// @ desc Get activities by id
-// @route GET/api/activity/:id
+// @ desc Get younger by id
+// @route GET/api/younger/:id
 // @acess Private
 
-const getActivityById = async (req,res) =>{
+const getYoungerById = async (req,res) =>{
    const {id} = req.params
-   const activity = await Activity.findById(id)
-   if(!activity){
+   const younger = await Younger.findById(id)
+   if(!younger){
       res.status(400)
-      res.json('Activity not found')
+      res.json('Younger activity not found')
   }else{
-   res.status(200).json(activity)
+   res.status(200).json(younger)
 }
 }
 
-// @ desc Set activity
-// @route POST/api/activity
+// @ desc Set younger activity
+// @route POST/api/younger
 // @acess Private
-const setActivity = asyncHandler(async (req, res) => {
+const setYounger = asyncHandler(async (req, res) => {
    const { generalTitle, cardTitle, cardDescription } = req.body;
    // Upload generalImage
    const generalImageResult = await cloudinary.uploader.upload(
@@ -66,8 +66,8 @@ const setActivity = asyncHandler(async (req, res) => {
       cloud_name: 'dzelffpdf'
      }
    );
-   
-   const newActivity = await Activity.create({
+   try{
+   const newYounger = await Younger.create({
      generalTitle,
      generalImage: {
        public_id: generalImageResult.public_id,
@@ -81,24 +81,27 @@ const setActivity = asyncHandler(async (req, res) => {
      },
    });
    
-   res.status(200).json({ message: 'Created successfully', newActivity });
+   res.status(200).json({ message: 'Created successfully', newYounger });}
+   catch(err){
+    res.json({"message":err})
+}
     });
  
-// @ desc Update activity
-// @route PUT/api/activity/:id
+// @ desc Update younger activity
+// @route PUT/api/younger/:id
 // @acess Private
 
-const updateActivity = asyncHandler(async (req,res) =>{ 
+const updateYounger = asyncHandler(async (req,res) =>{ 
    const { generalTitle, cardTitle, cardDescription } = req.body;
 
-   const existingActivity = await Activity.findById(req.params.id)
-   if(!existingActivity){
+   const existingYounger = await Younger.findById(req.params.id)
+   if(!existingYounger){
        res.status(400)
-       res.json(`Couldn't find Activity`)
+       res.json(`Couldn't find Younger Activity`)
    }
    else{
       // Upload new generalImage if provided
-      let generalImage = existingActivity.generalImage;
+      let generalImage = existingYounger.generalImage;
       if (req.files['generalImage']) {
         const generalImageResult = await cloudinary.uploader.upload(
           req.files['generalImage'][0].path,
@@ -115,7 +118,7 @@ const updateActivity = asyncHandler(async (req,res) =>{
       }
 
       // Upload new cardImage if provided
-      let cardImage = existingActivity.cardImage;
+      let cardImage = existingYounger.cardImage;
       if (req.files['cardImage']) {
         const cardImageResult = await cloudinary.uploader.upload(
           req.files['cardImage'][0].path,
@@ -132,7 +135,7 @@ const updateActivity = asyncHandler(async (req,res) =>{
       }
 
       // Update the activity
-      const updatedActivity = await Activity.findByIdAndUpdate(
+      const updatedYounger = await Younger.findByIdAndUpdate(
         req.params.id,
         {
           generalTitle,
@@ -144,28 +147,28 @@ const updateActivity = asyncHandler(async (req,res) =>{
         { new: true }
       );
 
-      return res.status(200).json({ message: 'Updated successfully', updatedActivity });
+      return res.status(200).json({ message: 'Updated successfully', updatedYounger });
    }
 });
 
 
 
-// @ desc Delete activity
-// @route Delete/api/activity/:id
+// @ desc Delete younger activity
+// @route Delete/api/younger/:id
 // @acess Private
 
-const deleteActivity = asyncHandler(async (req,res) =>{
-   const deletedActivity = await Activity.findById(req.params.id)
-   if(!deletedActivity){
+const deleteYounger = asyncHandler(async (req,res) =>{
+   const deletedYounger = await Younger.findById(req.params.id)
+   if(!deletedYounger){
        res.status(400)
-       res.json(`Couldn't find Activity`)
+       res.json(`Couldn't find Younger Activity`)
    }
    else{
-      await Activity.deleteOne({_id: req.params.id});
+      await Younger.deleteOne({_id: req.params.id});
       res.status(200).json({id:req.params.id,
        message: 'Deleted successfully'})
    }
 })
 
 
-export { getActivity, setActivity, updateActivity, deleteActivity,getActivityById }
+export { getYounger, setYounger, updateYounger, deleteYounger,getYoungerById }

@@ -13,7 +13,7 @@ const registerAdmin = asyncHandler(async(req,res)=>{
     
     
     const {email,password,passwordConfirmation,isAdmin}=req.body
-
+ 
     // check if user exists
     const adminExists = await Admin.findOne({email})
 

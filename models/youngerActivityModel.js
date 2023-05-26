@@ -1,6 +1,6 @@
 import mongoose from 'mongoose'
 
-const activitySchema = mongoose.Schema(
+const youngerActivitySchema = mongoose.Schema(
     {
     generalTitle : {
         type : String,
@@ -26,4 +26,4 @@ const activitySchema = mongoose.Schema(
 }
 )
 
-export default mongoose.model('Activity', activitySchema)
+export default mongoose.model('youngerActivity', youngerActivitySchema)
