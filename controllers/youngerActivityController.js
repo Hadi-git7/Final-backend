@@ -46,16 +46,8 @@ const getYoungerById = async (req,res) =>{
 // @route POST/api/younger
 // @acess Private
 const setYounger = asyncHandler(async (req, res) => {
-   const { generalTitle, cardTitle, cardDescription } = req.body;
-   // Upload generalImage
-   const generalImageResult = await cloudinary.uploader.upload(
-     req.files['generalImage'][0].path,
-     {
-      api_key: '347137159686789',
-      api_secret : '5gJrJIh1TObzsGiNXd38gP_EkLc',
-      cloud_name: 'dzelffpdf'
-     }
-   );
+   const {  cardTitle, cardDescription } = req.body;
+
    
    // Upload cardImage
    const cardImageResult = await cloudinary.uploader.upload(
@@ -68,11 +60,7 @@ const setYounger = asyncHandler(async (req, res) => {
    );
    try{
    const newYounger = await Younger.create({
-     generalTitle,
-     generalImage: {
-       public_id: generalImageResult.public_id,
-       url: generalImageResult.secure_url,
-     },
+
      cardTitle,
      cardDescription,
      cardImage: {
@@ -92,7 +80,7 @@ const setYounger = asyncHandler(async (req, res) => {
 // @acess Private
 
 const updateYounger = asyncHandler(async (req,res) =>{ 
-   const { generalTitle, cardTitle, cardDescription } = req.body;
+   const {  cardTitle, cardDescription } = req.body;
 
    const existingYounger = await Younger.findById(req.params.id)
    if(!existingYounger){
@@ -100,22 +88,7 @@ const updateYounger = asyncHandler(async (req,res) =>{
        res.json(`Couldn't find Younger Activity`)
    }
    else{
-      // Upload new generalImage if provided
-      let generalImage = existingYounger.generalImage;
-      if (req.files['generalImage']) {
-        const generalImageResult = await cloudinary.uploader.upload(
-          req.files['generalImage'][0].path,
-          {
-            api_key: '347137159686789',
-            api_secret: '5gJrJIh1TObzsGiNXd38gP_EkLc',
-            cloud_name: 'dzelffpdf'
-          }
-        );
-        generalImage = {
-          public_id: generalImageResult.public_id,
-          url: generalImageResult.secure_url
-        };
-      }
+ 
 
       // Upload new cardImage if provided
       let cardImage = existingYounger.cardImage;
@@ -138,8 +111,6 @@ const updateYounger = asyncHandler(async (req,res) =>{
       const updatedYounger = await Younger.findByIdAndUpdate(
         req.params.id,
         {
-          generalTitle,
-          generalImage,
           cardTitle,
           cardDescription,
           cardImage
