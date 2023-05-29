@@ -47,17 +47,9 @@ const getResourceById = async (req,res) =>{
 // @route POST/api/resource
 // @acess Private
 const setResource = asyncHandler(async (req, res) => {
-   const { generalTitle,description, cardTitle, cardDescription } = req.body;
-   // Upload generalImage
-   const generalImageResult = await cloudinary.uploader.upload(
-     req.files['generalImage'][0].path,
-     {
-      api_key: '347137159686789',
-      api_secret : '5gJrJIh1TObzsGiNXd38gP_EkLc',
-      cloud_name: 'dzelffpdf'
-     }
-   );
-   
+
+  const { cardTitle, cardDescription } = req.body;
+
    // Upload cardImage
    const cardImageResult = await cloudinary.uploader.upload(
      req.files['cardImage'][0].path,
@@ -69,12 +61,7 @@ const setResource = asyncHandler(async (req, res) => {
    );
    
    const newResource = await Resource.create({
-     generalTitle,
-     generalImage: {
-       public_id: generalImageResult.public_id,
-       url: generalImageResult.secure_url,
-     },
-     description,
+  
      cardTitle,
      cardDescription,
      cardImage: {
@@ -91,7 +78,7 @@ const setResource = asyncHandler(async (req, res) => {
 // @acess Private
 
 const updateResource = asyncHandler(async (req,res) =>{ 
-   const { generalTitle,description, cardTitle, cardDescription } = req.body;
+   const { cardTitle, cardDescription } = req.body;
 
    const existingResource = await Resource.findById(req.params.id)
    if(!existingResource){
@@ -99,22 +86,7 @@ const updateResource = asyncHandler(async (req,res) =>{
        res.json(`Couldn't find Resource`)
    }
    else{
-      // Upload new generalImage if provided
-      let generalImage = existingResource.generalImage;
-      if (req.files['generalImage']) {
-        const generalImageResult = await cloudinary.uploader.upload(
-          req.files['generalImage'][0].path,
-          {
-            api_key: '347137159686789',
-            api_secret: '5gJrJIh1TObzsGiNXd38gP_EkLc',
-            cloud_name: 'dzelffpdf'
-          }
-        );
-        generalImage = {
-          public_id: generalImageResult.public_id,
-          url: generalImageResult.secure_url
-        };
-      }
+ 
 
       // Upload new cardImage if provided
       let cardImage = existingResource.cardImage;
@@ -137,9 +109,7 @@ const updateResource = asyncHandler(async (req,res) =>{
       const updatedResource = await Resource.findByIdAndUpdate(
         req.params.id,
         {
-          generalTitle,
-          description,
-          generalImage,
+      
           cardTitle,
           cardDescription,
           cardImage

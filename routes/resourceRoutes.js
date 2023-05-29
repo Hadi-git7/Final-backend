@@ -11,13 +11,11 @@ router.route('/').get(getResource)
 router.route('/:id').get(getResourceById)
 router.route('/').post(
   uploadImage.fields([
-    { name: 'generalImage', maxCount: 1, dest: 'uploads/general' },
     { name: 'cardImage', maxCount: 1, dest: 'uploads/card' },
   ]),
   setResource
 );
 router.put('/:id', uploadImage.fields([
-  { name: 'generalImage', maxCount: 1 },
   { name: 'cardImage', maxCount: 1 }
 ]), updateResource)
 router.route('/:id').delete(deleteResource)
